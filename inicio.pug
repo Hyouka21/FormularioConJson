@@ -1,0 +1,60 @@
+extends layout.pug
+block titulo   
+    title inicio
+block formulario    
+    form(action=(actualizar ?'/actuInfo': borrar ? '/borrarInf':'/mostrar') method='post')
+        div.container
+            |       Buscar por patente: 
+            input(type='text' name='patente' id="txt" class="form-control " placeholder="ej: AAA123" required)  
+            br
+            br
+            input(type='submit' value=(actualizar ?'buscar para actualizar': borrar ? 'buscar para borrar' :'buscar') class="btn btn-primary" onclick="")
+            br
+            br
+            br
+block contenido
+    div#cont.container
+block codigo 
+        script.
+            
+            let cargar = () =>{
+            let arr;
+            fetch('datos.json')
+            .then( response => response.json() )
+            .then( objeto => {
+                arr=objeto;   
+            let con = document.getElementById("cont");
+            let contenido ="";
+             contenido +=`<table class="table table-light table-striped text-dark">
+                    <thead>
+                        <tr>
+                        <th scope="col">Patente</th>
+                        <th scope="col">Dueño</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Modelo</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                   
+             for(let x=0; x < arr.length ; x++){
+            contenido +=`
+                        <tr>
+                        <th scope="row">${arr[x].Patente}</th>
+                        <td>${arr[x].Dueño}</td>
+                        <td>${arr[x].Color}</td>
+                        <td>${arr[x].Marca}</td>
+                        <td>${arr[x].Modelo}</td>
+                        </tr> 
+                    `
+                }
+                contenido +="</tbody></table>"
+                con.innerHTML = contenido;
+            })
+            .catch( err => console.log(err) );
+            
+            }
+            window.onload = cargar();
+
+        
+        
